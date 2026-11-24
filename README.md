@@ -6,7 +6,7 @@ An independent Step 2 CK–style clinical reasoning question bank based on the O
 
 ## Practice
 
-Start with a 15-question cardiology block, or choose **New test** to select subjects, individual topics, or a printed page range. Each block samples distinct cases from the matching pool. Smaller topics use their available cases. The bank contains 207 original cases covering 159 numbered topics across 12 subjects.
+Start with a 15-question cardiology block, or choose **New test** to select subjects, individual topics, or a printed page range. Each block samples distinct cases from the matching pool. Smaller topics use their available cases. The bank contains 2,267 questions across 159 numbered topics and 12 subjects. These include 239 original cases and 2,028 labeled practice variants. 19 topics currently have at least 100 questions. The topic picker displays the number of original cases and variants available for each topic.
 
 Each submission locks the answer and displays the reasoning for all five options, the source section, and both printed and PDF page numbers. The next unanswered case opens immediately. The navigator supports flagging and revisiting cases. The last submission opens the block audit.
 

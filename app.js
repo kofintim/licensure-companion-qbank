@@ -106,7 +106,7 @@ function explanation(q, choice, ordinal, previous=false) {
   const correct = choice === q.answer;
   return '<section class="card review '+(correct?'':'miss')+'"><div class="mini">Question '+ordinal+' · Answer review</div><h2 class="'+(correct?'goodtext':'badtext')+'">'+(correct?'Correct':'Incorrect')+' · '+letters[q.answer]+'. '+esc(q.options[q.answer])+'</h2>'+
     (!correct?'<p class="detail">Your answer · '+letters[choice]+'. '+esc(q.options[choice])+'</p>':'')+
-    '<p class="sectiongap">'+esc(q.reasons[q.answer])+'</p><div class="source">The High-Yield Licensure Companion · '+esc(source(q))+'</div>'+
+    (q.variant?'<p class="detail">Concept revisited · '+esc(q.concept)+'</p>':'')+'<p class="sectiongap">'+esc(q.reasons[q.answer])+'</p><div class="source">The High-Yield Licensure Companion · '+esc(source(q))+'</div>'+
     '<details open><summary>Why the other options are wrong</summary><ul>'+q.options.map((o,i)=>i===q.answer?'':'<li><b>'+letters[i]+'. '+esc(o)+'</b> — '+esc(q.reasons[i])+'</li>').join('')+'</ul></details>'+
     (previous?button('dismiss','Close review','textbtn sectiongap'):'')+'</section>';
 }
@@ -125,7 +125,7 @@ function questionCard(s,q) {
     return button('choose','<span class="letter">'+letters[i]+'</span><span>'+esc(o)+'</span>'+(tag?'<small>'+tag+'</small>':''),'option '+state,i,a?'disabled':'aria-pressed="'+(selected===i)+'"');
   }).join('');
   const next = a && (s.cursor<s.ids.length-1 || s.finished);
-  return '<section class="card exam"><div class="examhead"><strong>Question '+(current+1)+' of '+s.ids.length+'</strong><span>'+esc(subjectTitle(chapter(q)))+'</span></div>'+
+  return '<section class="card exam"><div class="examhead"><strong>Question '+(current+1)+' of '+s.ids.length+'</strong><span>'+(q.variant?'Practice variant · ':'')+esc(subjectTitle(chapter(q)))+'</span></div>'+
     '<div class="examcontent"><p class="stem">'+stem+'</p><div class="choices" role="group" aria-label="Answer choices">'+choices+'</div></div>'+
     '<div class="examfoot">'+button('flag',flag?'★ Flagged':'☆ Flag question',flag?'flagged':'quiet','', 'aria-pressed="'+Boolean(flag)+'"')+
     (a ? (next?button(s.finished&&current===s.ids.length-1?'audit':'forward',s.finished&&current===s.ids.length-1?'View score':'Next question','primary'):'') : button('submit','Submit answer','primary','',selected===null?'disabled':''))+'</div></section>'+
@@ -170,7 +170,10 @@ function topicList() {
     const list=Object.keys(sections).filter(sec=>ids.has(sec)&&sec.split('.')[0]===id);
     return '<div class="sectiongap"><h3>'+esc(subjectTitle(id))+'</h3><div class="topiclist">'+list.map(sec=>{
       const qs=questions.filter(q=>q.section===sec);
-      return '<label class="topic"><input data-topic="'+sec+'" type="checkbox" '+(settings.topics.includes(sec)?'checked':'')+'><span>'+esc(sectionTitle(sec))+'<small>§ '+sec+' · '+qs.length+' '+(qs.length===1?'case':'cases')+'</small></span></label>';
+      const variants=qs.filter(q=>q.variant).length;
+      const originals=qs.length-variants;
+      const breakdown=originals+' original'+(originals===1?'':'s')+(variants?' + '+variants+' variant'+(variants===1?'':'s'):'');
+      return '<label class="topic"><input data-topic="'+sec+'" type="checkbox" '+(settings.topics.includes(sec)?'checked':'')+'><span>'+esc(sectionTitle(sec))+'<small>§ '+sec+' · '+qs.length+' total · '+breakdown+'</small></span></label>';
     }).join('')+'</div></div>';
   }).join('');
 }
